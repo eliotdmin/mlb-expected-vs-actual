@@ -1,0 +1,98 @@
+---
+title: "analysis"
+author: "Eliot Min"
+date: "7/12/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot)
+library(stringr)
+library(tidyverse)
+```
+
+```{r reading in data}
+
+data <- read_csv("MLB statcast data/stats.csv")
+
+```
+
+
+# Question 1: The ability to "hit to all fields" is a very highly touted skill,
+# often the sign of a mature player. Should this be taken into account to
+# explain the discrepancy between expected batting average and actual batting
+# average?
+
+# Will start out by doing an analysis of the 2017 data:
+
+```{r}
+
+data_2017 <- data %>%
+  select(last_name, first_name, player_id, year, batting_avg, xba, pull_percent, straightaway_percent, opposite_percent) %>%
+  filter(year == 2017) %>%
+  mutate(difference = batting_avg-xba)
+
+  ggplot(data_2017, aes(x = pull_percent, y = difference)) + geom_point() + 
+  labs(x = "Pull Percent", 
+       y = "Difference between batting average and expected batting average") +
+    geom_smooth(method = 'lm') +
+  theme_classic()
+
+```
+
+#Now the 2018 data:
+
+
+```{r}
+
+data_2018 <- data %>%
+  select(last_name, first_name, player_id, year, batting_avg, xba, pull_percent, straightaway_percent, opposite_percent) %>%
+  filter(year == 2018) %>%
+  mutate(difference = batting_avg-xba)
+
+  ggplot(data_2018, aes(x = pull_percent, y = difference)) + geom_point() + 
+  labs(x = "Pull Percent", 
+       y = "Difference between batting average and expected batting average") +
+    geom_smooth(method = 'lm') +
+  theme_classic()
+
+```
+
+#2019 data:
+
+
+```{r}
+
+data_2019 <- data %>%
+  select(last_name, first_name, player_id, year, batting_avg, xba, pull_percent, straightaway_percent, opposite_percent) %>%
+  filter(year == 2019) %>%
+  mutate(difference = batting_avg-xba)
+
+  ggplot(data_2019, aes(x = pull_percent, y = difference)) + geom_point() + 
+  labs(x = "Pull Percent", 
+       y = "Difference between batting average and expected batting average") +
+    geom_smooth(method = 'lm') +
+  theme_classic()
+
+```
+
+#2020 and 2021 data to be combined due to the shorter season thus far:
+
+
+```{r}
+
+data_2020_2021 <- data %>%
+  select(last_name, first_name, player_id, year, batting_avg, xba, pull_percent, straightaway_percent, opposite_percent) %>%
+  filter(year %in% c(2020, 2021)) %>%
+  mutate(difference = batting_avg-xba)
+
+  ggplot(data_2020_2021, aes(x = pull_percent, y = difference)) + geom_point() + 
+  labs(x = "Pull Percent", 
+       y = "Difference between batting average and expected batting average") +
+    geom_smooth(method = 'lm') +
+  theme_classic()
+
+```
+
+#Fascinating... we see a negative correlation. Insofar as we want xBA to "indicate" whether a batter is getting lucky or unlucky, one might make the case that 
