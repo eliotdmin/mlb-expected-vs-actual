@@ -7,22 +7,24 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(ggplot)
+library(ggplot2)
 library(stringr)
 library(tidyverse)
 ```
 
 ```{r reading in data}
 
+#Data is taken from 
 data <- read_csv("MLB statcast data/stats.csv")
 
 ```
 
-
 # Question 1: The ability to "hit to all fields" is a very highly touted skill,
 # often the sign of a mature player. Should this be taken into account to
 # explain the discrepancy between expected batting average and actual batting
-# average?
+# average? 
+
+Expected batting average only takes into account the angle at which a batter hits a ball, the velocity at which the ball is hit and, in certain cases, the speed at which a batter is capable of running.
 
 # Will start out by doing an analysis of the 2017 data:
 
@@ -38,6 +40,10 @@ data_2017 <- data %>%
        y = "Difference between batting average and expected batting average") +
     geom_smooth(method = 'lm') +
   theme_classic()
+  
+  
+  model <- lm(difference~pull_percent, data = data_2017)
+  summary(model)
 
 ```
 
@@ -57,6 +63,8 @@ data_2018 <- data %>%
     geom_smooth(method = 'lm') +
   theme_classic()
 
+  model <- lm(difference~pull_percent, data = data_2018)
+  summary(model)
 ```
 
 #2019 data:
@@ -74,6 +82,9 @@ data_2019 <- data %>%
        y = "Difference between batting average and expected batting average") +
     geom_smooth(method = 'lm') +
   theme_classic()
+  
+  model <- lm(difference~pull_percent, data = data_2019)
+  summary(model)
 
 ```
 
@@ -92,7 +103,14 @@ data_2020_2021 <- data %>%
        y = "Difference between batting average and expected batting average") +
     geom_smooth(method = 'lm') +
   theme_classic()
+  
+  
+  model <- lm(difference~pull_percent, data = data_2020_2021)
+  summary(model)
 
 ```
 
-#Fascinating... we see a negative correlation. Insofar as we want xBA to "indicate" whether a batter is getting lucky or unlucky, one might make the case that 
+Fascinating... we see a negative correlation for each year, but an insignificant
+one for 2018. Insofar as we want xBA to "indicate" whether a batter is getting
+lucky or unlucky, one might make the case that the degree to which one is able
+to hit the ball to the opposite field/straightaway is currently lacking in the xBA calculation.
