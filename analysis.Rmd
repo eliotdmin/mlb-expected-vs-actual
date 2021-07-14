@@ -1,5 +1,5 @@
 ---
-title: "Should xBA weigh pull tendencies?"
+title: "Should MLB weigh pull tendency when calculating xBA?"
 author: "Eliot Min"
 date: "7/12/2021"
 output: html_document
@@ -59,8 +59,7 @@ full_data <- batting_data %>%
 There is a statistically significant negative correlation between BA-xBA and
 pull percentage (p<.001) — this would seem to suggest that the more you pull the
 ball (and, resultingly, the less you use the whole field) the more likely you
-are to underperform your xBA. xBA should be adjusted downwards based on tendency
-to pull the ball.
+are to underperform your xBA.
 
 Let's see if this trend holds for individual years of xBA vs BA data. I will
 start out by doing an analysis of the 2017 data:
@@ -152,14 +151,3 @@ one might make the case that the degree to which one is able to hit the ball to
 the opposite field/straightaway is currently lacking in the xBA calculation. xBA
 should probably be scaled upwards for hitters who pull the ball less often,
 while xBA should be scaled down for hitters who are pull heavy.
-
-```{r}
-library(randomForest)
-
-
-
-
-```
-
-
-
