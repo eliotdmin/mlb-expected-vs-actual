@@ -1,5 +1,5 @@
 ---
-title: "Should xBA and xSLG weigh pull tendencies?"
+title: "Should xBA weigh pull tendencies?"
 author: "Eliot Min"
 date: "7/12/2021"
 output: html_document
@@ -8,26 +8,28 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 
+
 library(ggplot2)
 library(stringr)
 library(tidyverse)
+library(blogdown)
 
 ```
 
 ```{r reading in data, warning = FALSE, message = FALSE}
 
-#Data is taken from baseball savant
+#Data is taken from baseball savant — thanks so much for making it available!
 
 batting_data <- read_csv("MLB statcast data/stats.csv")
 
 ```
 
-The ability to "hit to all fields" is a very highly touted skill,
-often the sign of a mature player. Should this be taken into account to #
-explain the discrepancy between expected batting average and actual batting #
-average? # Expected batting average only takes into account the angle at which a
-batter hits a ball, the velocity at which the ball is hit and, in certain
-cases, the speed at which a batter is capable of running. 
+Expected batting average only takes into account the angle at which a batter
+hits a ball, the velocity at which the ball is hit and, in certain cases, the
+speed at which a batter is capable of running. However, it does not take into
+account the *direction* the ball is hit in — that is, it does not take into
+account how often a right-handed batter hits the ball to left field, his
+pull-side, instead of to center or right field.
 
 We'll do more in-depth analyses of each individual season, but for now, let's
 look at the data altogether:
@@ -37,24 +39,31 @@ look at the data altogether:
 full_data <- batting_data %>%
   mutate(difference = batting_avg-xba)
 
-  full_data_cor <- cor(full_data$difference, full_data$pull_percent, method = "pearson")
-
   ggplot(full_data, aes(x = pull_percent, y = difference)) + 
     geom_point() + 
   labs(x = "Pull Percent", 
        y = "Batting Average - Expected Batting Average",
-       title = "Difference between BA and xBA for hitters against pull percent \n 2020-2021") +
+       title = "Difference between BA and xBA for hitters against pull percent \n 2017-2021") +
     geom_smooth(method = 'lm') +
-    annotate("text", x = 30, y = .05, label = ".20", color = "blue") + 
+    annotate("text", x = 30, y = .08, label = "r = .20") + 
   theme_classic()
   
-
+  #model to gather significance values and correlation value
+  
+  full_data_model <- lm(difference ~ pull_percent, data = full_data)
+  full_data_cor <- cor(full_data$difference, 
+                       full_data$pull_percent, method = "pearson")
+  
 ```
 
-There is a slight negative correlation between BA-xBA and pull percentage — this would seem to suggest that the more you pull the ball (and, resultingly, the less you use the whole field) the more likely you are to underperform your xBA. xBA should be adjusted downwards based on tendency to pull the ball.
+There is a statistically significant negative correlation between BA-xBA and
+pull percentage (p<.001) — this would seem to suggest that the more you pull the
+ball (and, resultingly, the less you use the whole field) the more likely you
+are to underperform your xBA. xBA should be adjusted downwards based on tendency
+to pull the ball.
 
-Let's see if this trend holds Will start out by
-doing an analysis of the 2017 data:
+Let's see if this trend holds for individual years of xBA vs BA data. I will
+start out by doing an analysis of the 2017 data:
 
 ```{r, message = FALSE}
 
@@ -73,13 +82,11 @@ ba_2017 <- batting_data %>%
 
   cor(ba_2017$difference, ba_2017$pull_percent, method = "pearson")
   
-  model <- lm(difference~pull_percent, data = ba_2017)
-  summary(model)
+  model_2017 <- lm(difference~pull_percent, data = ba_2017)
 
 ```
 
 2018 data:
-
 
 ```{r,  message=FALSE}
 
@@ -94,8 +101,7 @@ data_2018 <- batting_data %>%
     geom_smooth(method = 'lm') +
   theme_classic()
 
-  model <- lm(difference~pull_percent, data = data_2018)
-  summary(model)
+  model_2018 <- lm(difference~pull_percent, data = data_2018)
 ```
 
 2019 data:
@@ -113,14 +119,12 @@ data_2019 <- batting_data %>%
     geom_smooth(method = 'lm') +
   theme_classic()
   
-  model <- lm(difference~pull_percent, data = data_2019)
-  summary(model)
+  model_2019 <- lm(difference~pull_percent, data = data_2019)
 
 ```
 
 2020 and 2021 data to be combined due to the shorter season in 2020 and the
 current games played in 2021, which roughly equates to a full 162 games:
-
 
 ```{r, message=FALSE}
 
@@ -137,33 +141,25 @@ data_2020_2021 <- batting_data %>%
   
   
   model <- lm(difference~pull_percent, data = data_2020_2021)
-  summary(model)
 
 ```
 
-We see a negative correlation for each year, but an insignificant
-one for 2018. Insofar as we want xBA to "indicate" whether a batter is getting
-lucky or unlucky, one might make the case that the degree to which one is able
-to hit the ball to the opposite field/straightaway is currently lacking in the xBA calculation. xBA should probably be scaled upwards for hitters 
+We see a negative correlation for each year, although the correlation for the
+2018 data is insignificant.
 
-WHAT ABOUT SLUGGING PERCENTAGE? One might suspect that those who 
+Since we want xBA to "indicate" whether a batter is getting lucky or unlucky,
+one might make the case that the degree to which one is able to hit the ball to
+the opposite field/straightaway is currently lacking in the xBA calculation. xBA
+should probably be scaled upwards for hitters who pull the ball less often,
+while xBA should be scaled down for hitters who are pull heavy.
 
-```{r, message=FALSE}
+```{r}
+library(randomForest)
 
-data_slg <- batting_data %>%
-  mutate(difference = slg_percent-xslg)
 
-  ggplot(data_slg, aes(x = pull_percent, y = difference)) + geom_point() + 
-  labs(x = "Pull Percent", 
-       y = "Slugging percentage - expected slugging percentage",
-       title = "Difference between slg and xslg for hitters in 2017 as a function of pull %") +
-    geom_smooth(method = 'lm') +
-  theme_classic()
 
-  
-  model <- lm(difference~pull_percent, data = data_slg)
-  summary(model)
 
 ```
+
 
 
