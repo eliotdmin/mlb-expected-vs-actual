@@ -150,3 +150,10 @@ one might make the case that the degree to which one is able to hit the ball to
 the opposite field/straightaway is currently lacking in the xBA calculation. xBA
 should probably be scaled upwards for hitters who pull the ball less often,
 while xBA should be scaled down for hitters who are pull heavy.
+
+```{r save_graphics}
+
+
+
+```
+
