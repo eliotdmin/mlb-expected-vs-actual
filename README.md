@@ -30,3 +30,5 @@ and aren't too pull-heavy are more likely to overperform their xBAs, while
 hitters who are pull-heavy are likely to underperform their xBAs. This has
 interesting implications for the xBA statistic, including but not limited to the
 possible adjustment of xBA based on pull percentage.
+
+<img width="874" alt="Screen Shot 2021-07-14 at 8 21 54 PM" src="https://user-images.githubusercontent.com/60484287/125709088-4df630d4-6d19-41e3-a5a5-8e062b585c1b.png">
