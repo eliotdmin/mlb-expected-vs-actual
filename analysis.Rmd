@@ -8,13 +8,13 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 
-
 library(ggplot2)
 library(stringr)
 library(tidyverse)
 library(blogdown)
 
 ```
+
 
 ```{r reading in data, warning = FALSE, message = FALSE}
 
@@ -76,10 +76,9 @@ ba_2017 <- batting_data %>%
        y = "Batting Average - Expected Batting Average",
        title = "Difference between BA and xBA for hitters in 2017 as a function of pull %") +
     geom_smooth(method = 'lm') +
-    annotate("text", x = 30, y = .05, label = "r = -.247", color = "blue") + 
   theme_classic()
 
-  cor(ba_2017$difference, ba_2017$pull_percent, method = "pearson")
+  cor_2017 <- cor(ba_2017$difference, ba_2017$pull_percent, method = "pearson")
   
   model_2017 <- lm(difference~pull_percent, data = ba_2017)
 
