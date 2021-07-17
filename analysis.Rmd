@@ -31,7 +31,7 @@ account the *direction* the ball is hit in — that is, it does not take into
 account how often a right-handed batter hits the ball to left field, his
 pull-side, instead of to center or right field.
 
-We'll do more in-depth analyses of each individual season, but for now, let's
+We'll do an analysis for each individual season, but for now, let's
 look at the data altogether:
 
 ```{r, message=FALSE}
@@ -45,7 +45,7 @@ full_data <- batting_data %>%
        y = "Batting Average - Expected Batting Average",
        title = "Difference between BA and xBA for hitters against pull percent \n 2017-2021") +
     geom_smooth(method = 'lm') +
-    annotate("text", x = 30, y = .08, label = "r = .20") + 
+    annotate("text", x = 30, y = .08, label = "r = -.20") + 
   theme_classic()
   
   #model to gather significance values and correlation value
@@ -66,21 +66,24 @@ start out by doing an analysis of the 2017 data:
 
 ```{r, message = FALSE}
 
-ba_2017 <- batting_data %>%
+batting_2017 <- batting_data %>%
   filter(year == 2017) %>%
   mutate(difference = batting_avg-xba)
 
-  ggplot(ba_2017, aes(x = pull_percent, y = difference)) + 
+  ggplot(batting_2017, aes(x = pull_percent, y = difference)) + 
     geom_point() + 
   labs(x = "Pull Percent", 
        y = "Batting Average - Expected Batting Average",
-       title = "Difference between BA and xBA for hitters in 2017 as a function of pull %") +
+       title = "Difference between BA and xBA for hitters against pull percent \n 2017") +
+
+    annotate("text", x = 30, y = .06, label = "r = -.247") + 
     geom_smooth(method = 'lm') +
   theme_classic()
 
-  cor_2017 <- cor(ba_2017$difference, ba_2017$pull_percent, method = "pearson")
+  cor_2017 <- cor(batting_2017$difference, batting_2017$pull_percent,
+                  method = "pearson")
   
-  model_2017 <- lm(difference~pull_percent, data = ba_2017)
+  model_2017 <- lm(difference~pull_percent, data = batting_2017)
 
 ```
 
@@ -88,36 +91,46 @@ ba_2017 <- batting_data %>%
 
 ```{r,  message=FALSE}
 
-data_2018 <- batting_data %>%
+batting_2018 <- batting_data %>%
   select(last_name, first_name, player_id, year, batting_avg, xba, pull_percent, straightaway_percent, opposite_percent) %>%
   filter(year == 2018) %>%
   mutate(difference = batting_avg-xba)
 
-  ggplot(data_2018, aes(x = pull_percent, y = difference)) + geom_point() + 
+  ggplot(batting_2018, aes(x = pull_percent, y = difference)) + geom_point() + 
   labs(x = "Pull Percent", 
-       y = "Difference between batting average and expected batting average") +
+       y = "Batting Average - Expected Batting Average",
+       title = "Difference between BA and xBA for hitters against pull percent \n 2018") +
+    annotate("text", x = 30, y = .055, label = "r = -.129") + 
     geom_smooth(method = 'lm') +
   theme_classic()
 
-  model_2018 <- lm(difference~pull_percent, data = data_2018)
+    
+
+  cor_2018 <- cor(batting_2018$difference, batting_2018$pull_percent, method = "pearson")
+  
+  model_2018 <- lm(difference~pull_percent, data = batting_2018)
 ```
 
 2019 data:
 
 ```{r, message = FALSE}
 
-data_2019 <- batting_data %>%
+batting_2019 <- batting_data %>%
   select(last_name, first_name, player_id, year, batting_avg, xba, pull_percent, straightaway_percent, opposite_percent) %>%
   filter(year == 2019) %>%
   mutate(difference = batting_avg-xba)
 
-  ggplot(data_2019, aes(x = pull_percent, y = difference)) + geom_point() + 
+  ggplot(batting_2019, aes(x = pull_percent, y = difference)) + geom_point() + 
   labs(x = "Pull Percent", 
-       y = "Difference between batting average and expected batting average") +
+       y = "Batting Average - Expected Batting Average",
+       title = "Difference between BA and xBA for hitters against pull percent \n 2019") +
     geom_smooth(method = 'lm') +
+    annotate("text", x = 30, y = .055, label = "r = -.236") + 
   theme_classic()
   
-  model_2019 <- lm(difference~pull_percent, data = data_2019)
+  
+  cor_2019 <- cor(batting_2019$difference, batting_2019$pull_percent, method = "pearson")
+  model_2019 <- lm(difference~pull_percent, data = batting_2019)
 
 ```
 
@@ -126,19 +139,23 @@ current games played in 2021, which roughly equates to a full 162 games:
 
 ```{r, message=FALSE}
 
-data_2020_2021 <- batting_data %>%
+batting_2020_2021 <- batting_data %>%
   select(last_name, first_name, player_id, year, batting_avg, xba, pull_percent, straightaway_percent, opposite_percent) %>%
   filter(year %in% c(2020, 2021)) %>%
   mutate(difference = batting_avg-xba)
 
-  ggplot(data_2020_2021, aes(x = pull_percent, y = difference)) + geom_point() + 
+  ggplot(batting_2020_2021, aes(x = pull_percent, y = difference)) + geom_point() + 
   labs(x = "Pull Percent", 
-       y = "Difference between batting average and expected batting average") +
+       y = "Batting Average - Expected Batting Average",
+       title = "Difference between BA and xBA for hitters against pull percent \n 2020-2021") +
+    annotate("text", x = 30, y = .063, label = "r = -.180") + 
     geom_smooth(method = 'lm') +
   theme_classic()
   
   
-  model <- lm(difference~pull_percent, data = data_2020_2021)
+  cor_2020_2021 <- cor(batting_2020_2021$difference, batting_2020_2021$pull_percent, method = "pearson")
+  model <- lm(difference~pull_percent, data = batting_2020_2021)
+  
 
 ```
 
@@ -151,9 +168,4 @@ the opposite field/straightaway is currently lacking in the xBA calculation. xBA
 should probably be scaled upwards for hitters who pull the ball less often,
 while xBA should be scaled down for hitters who are pull heavy.
 
-```{r save_graphics}
-
-
-
-```
 
