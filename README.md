@@ -21,7 +21,9 @@ expected to experience negative regression. As an extreme example, a player who
 has a batting average of .330 — an excellent batting average — but an expected
 batting average of .270 should not expect to his .330 for the rest of the
 season. Conversely, an individual hitting .220 with a .260 xBA should see his
-fortunes reverse soon.
+fortunes reverse soon. These numbers are especially relevant for teams and
+fantasy baseball players when evaluating a player's projected value for the
+resst of the season.
 
 In this analysis, I use statcast data collected from 2017 onwards to show that
 xBA would more accurately serve as a predictor of batting average if it were to
