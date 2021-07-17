@@ -7,7 +7,8 @@ advanced metric tracking software) in the last decade, however, predictive
 statistics such as xBA (expected batting average) have come to the forefront.
 Expected batting average ignores the outcome of each batted ball, but calculates
 the probability of a hit based on the batted ball's velocity, angle, and, in the
-case of a ground ball, the player's speed.
+case of a ground ball, the player's speed. For more information, please see 
+https://baseballsavant.mlb.com/leaderboard/expected_statistics.
 
 Often, xBA falls slightly above or below a player's actual batting average (At
 the time of writing, on July 12, 2021, the average absolute difference between
