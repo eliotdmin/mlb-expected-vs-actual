@@ -1,4 +1,4 @@
-# mlb-expected-vs-actual
+Should MLB adjust its xBA statistic?
 
 Batting average (BA) is widely recognized as one of the most important MLB
 statistics, with the league leaders in batting average awarded annually and
