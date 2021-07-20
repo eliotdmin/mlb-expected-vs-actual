@@ -35,4 +35,5 @@ holds for each year of data collected since 2017, and has interesting
 implications for the xBA statistic, including but not limited to suggesting a
 possible adjustment of xBA based on pull percentage.
 
-<img width="874" alt="Screen Shot 2021-07-14 at 8 21 54 PM" src="https://user-images.githubusercontent.com/60484287/125709088-4df630d4-6d19-41e3-a5a5-8e062b585c1b.png">
+<img width="745" alt="Screen Shot 2021-07-20 at 12 36 09 PM 1" src="https://user-images.githubusercontent.com/60484287/126362120-aec29ad0-a286-4809-91d5-5eae1eeb7b9b.png">
+
