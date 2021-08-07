@@ -8,10 +8,8 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 
-library(ggplot2)
-library(stringr)
 library(tidyverse)
-library(blogdown)
+library(skimr)
 
 ```
 
@@ -22,6 +20,7 @@ library(blogdown)
 
 batting_data <- read_csv("MLB statcast data/stats.csv")
 
+colnames(batting_data)
 ```
 
 Expected batting average only takes into account the angle at which a batter
