@@ -12,7 +12,7 @@ library(tidyverse)
 library(skimr)
 
 ```
-
+## Part 1: Downloading the data
 
 ```{r reading in data, warning = FALSE, message = FALSE}
 
@@ -22,6 +22,69 @@ batting_data <- read_csv("MLB statcast data/stats.csv")
 
 colnames(batting_data)
 ```
+
+##Exploratory data analyses
+
+```{r}
+
+#getting quantiles
+
+quantile_25_ba <- quantile(batting_data$batting_avg, .25)
+quantile_75_ba <- quantile(batting_data$batting_avg, .75)
+
+ggplot(batting_data, aes(x = batting_avg)) + 
+  geom_histogram() + 
+  labs(x = "Batting average",
+       y = "Number of hitters",
+       title = "Distribution of batting averages is roughly normal with IQR ~.035") +
+  geom_vline(xintercept = quantile_25_ba, color = "blue") +
+  geom_vline(xintercept = quantile_75_ba, color = "blue") +
+         theme_classic()
+
+```
+
+```{r}
+
+#getting quantiles of batting average variables
+
+quantile_25_xba <- quantile(batting_data$xba, .25)
+quantile_75_xba <- quantile(batting_data$xba, .75)
+
+ggplot(batting_data, aes(x = xba)) + 
+  geom_histogram() + 
+  labs(x = "Batting average",
+       y = "Number of hitters",
+       title = "Distribution of expected batting averages is roughly normal with IQR ~.032") +
+  geom_vline(xintercept = quantile_25_xba, color = "blue") +
+  geom_vline(xintercept = quantile_75_xba, color = "blue") +
+         theme_classic()
+
+```
+
+```{r}
+
+batting_data %>%
+  select(c(xba, batting_avg)) %>%
+  summary()
+
+```
+```{r}
+
+batting_data <- batting_data %>%
+  mutate(difference = batting_avg-xba)
+
+quantile_25_diff <- quantile(batting_data$difference, .25)
+quantile_75_diff <- quantile(batting_data$difference, .75)
+
+ggplot(batting_data, aes(x = difference)) + geom_histogram() +
+  geom_vline(xintercept = quantile_25_diff, color = "blue") +
+  geom_vline(xintercept = quantile_75_diff, color = "blue") +
+  labs(title = "Batting average exceeds expected batting average more often than not",
+       x = "Difference between") +
+  theme_classic()
+
+```
+
 
 Expected batting average only takes into account the angle at which a batter
 hits a ball, the velocity at which the ball is hit and, in certain cases, the
